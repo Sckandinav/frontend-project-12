@@ -8,8 +8,8 @@ export default function ErrorPage() {
   console.error(error);
 
   return (
-    <Container fluid="md">
-      <Row className="justify-content-md-center">
+    <Container fluid className="h-100 my-5">
+      <Row className="justify-content-center align-items-center h-100">
         <Col className="md-12 text-center">
           <span className="display-1 d-block">404</span>
           <div className="mb-4 lead">
