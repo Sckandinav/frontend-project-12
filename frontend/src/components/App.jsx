@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { Container } from 'react-bootstrap';
 import {
   Route,
   createBrowserRouter,
@@ -46,9 +47,9 @@ const router = createBrowserRouter(
 const App = () => {
   return (
     <AuthProvider>
-      <div className="h-100" id="chat">
+      <Container fluid className="h-100">
         <RouterProvider router={router}></RouterProvider>
-      </div>
+      </Container>
     </AuthProvider>
   );
 };
