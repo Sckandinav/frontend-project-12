@@ -1,7 +1,10 @@
 import { selectors as channelsSelectors } from './channelsSlice';
-import { selectors as messagesSelectors } from './channelsSlice';
+import { selectors as messagesSelectors } from './messagesSlice';
 
-export const getAllChannels = (state) => channelsSelectors.selectAll(state);
-export const getCurrentChannelId = (state) => state.channels.currentChannelId;
+const getAllChannels = (state) => channelsSelectors.selectAll(state);
 
-export const getMessages = (state) => messagesSelectors.selectAll(state);
+const getCurrentChannelId = (state) => state.channels.currentChannelId;
+
+const getMessages = (state) => messagesSelectors.selectAll(state);
+
+export { getAllChannels, getCurrentChannelId, getMessages };

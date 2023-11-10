@@ -32,7 +32,7 @@ const LoginPage = () => {
       setAuthFailed(false);
       try {
         const { data } = await axios.post(routes.login, values);
-        localStorage.setItem('userId', JSON.stringify(data));
+        localStorage.setItem('user', JSON.stringify(data));
         logIn();
         const { from } = location.state;
         navigate(from);
