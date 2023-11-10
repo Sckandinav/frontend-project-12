@@ -1,11 +1,11 @@
 import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 
 import Channel from './Channel';
-import { selectors } from '../slices/channelsSlice';
+import { getAllChannels } from '../slices/selectors';
 
 const Channels = () => {
-  const channels = useSelector(selectors.selectAll);
+  const channels = useSelector(getAllChannels);
 
   return (
     <ul
@@ -18,5 +18,4 @@ const Channels = () => {
     </ul>
   );
 };
-
 export default Channels;

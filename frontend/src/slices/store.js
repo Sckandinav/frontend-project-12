@@ -8,6 +8,5 @@ const store = configureStore({
     messages: messagesReducer,
   },
 });
-console.log('STORE', store);
 
 export default store;

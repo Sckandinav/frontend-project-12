@@ -90,11 +90,9 @@ const LoginPage = () => {
                     autoComplete="new-password"
                     isInvalid={authFailed}
                   />
-                  {authFailed && (
-                    <Form.Control.Feedback type="invalid" tooltip>
-                      Неверные имя пользователя или пароль
-                    </Form.Control.Feedback>
-                  )}
+                  <Form.Control.Feedback type="invalid" tooltip>
+                    Неверные имя пользователя или пароль
+                  </Form.Control.Feedback>
                 </FloatingLabel>
 
                 <Button

@@ -2,38 +2,32 @@ import axios from 'axios';
 import React, { useEffect } from 'react';
 import { Button, Form } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
-
 import routes from '../../routes';
 import Channels from '../Channels';
 import { actions as channelsActions } from '../../slices/channelsSlice';
 import { actions as messagesActions } from '../../slices/messagesSlice';
-
 const getAuthHeader = () => {
   const userId = JSON.parse(localStorage.getItem('userId'));
-
   if (userId && userId.token) {
     return { Authorization: `Bearer ${userId.token}` };
   }
   return {};
 };
-
 const ChatPage = () => {
   const dispatch = useDispatch();
-
   useEffect(() => {
     async function fetchData() {
       const { data } = await axios.get(routes.data, {
         headers: getAuthHeader(),
       });
+      console.log('data', data);
       const { channels, messages, currentChannelId } = data || {};
-
       dispatch(channelsActions.addChannels(channels));
-      //dispatch(channelsActions.setCurrentChannel(currentChannelId));
+      dispatch(channelsActions.setCurrentChannel(currentChannelId));
       dispatch(messagesActions.addMessages(messages));
     }
     fetchData();
   }, [dispatch]);
-
   return (
     <div className="container h-100 my-4 overflow-hidden rounded shadow">
       <div className="row h-100 bg-white flex-md-row">
