@@ -1,6 +1,6 @@
 import axios from 'axios';
 import React, { useEffect } from 'react';
-import { Button } from 'react-bootstrap';
+import { Container, Row } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
 import routes from '../../routes';
 import Channels from '../Channels';
@@ -34,24 +34,12 @@ const ChatPage = () => {
     fetchData();
   }, [dispatch]);
   return (
-    <div className="container h-100 my-4 overflow-hidden rounded shadow">
-      <div className="row h-100 bg-white flex-md-row">
-        <div className="col-4 col-md-2 border-end px-0 bg-light flex-column h-100 d-flex">
-          <div className="d-flex mt-1 justify-content-between mb-2 ps-4 pe-2 p-4">
-            <b>Каналы</b>
-            <Button className="p-0 text-primary btn btn-group-vertical"></Button>
-          </div>
-          <Channels />
-        </div>
-        <div className="col p-0 h-100">
-          <div className="d-flex flex-column h-100">
-            <MessageHeader />
-            <Messages />
-            <MessageForm />
-          </div>
-        </div>
-      </div>
-    </div>
+    <Container className="h-100 my-4 overflow-hidden rounded shadow">
+      <Row className="h-100 bg-white flex-md-row">
+        <Channels />
+        <Messages />
+      </Row>
+    </Container>
   );
 };
 export default ChatPage;

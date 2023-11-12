@@ -2,20 +2,14 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { Provider } from 'react-redux';
-import { io } from 'socket.io-client';
-import ChatProvider from './contexts/ChatProvider';
-import AuthProvider from './contexts/AuthProvider';
-import App from './components/App';
+
 import store from './slices/store';
+import init from './init';
 
-const socket = io();
+const app = async () => {
+  const root = ReactDOM.createRoot(document.getElementById('chat'));
+  const initApp = await init();
+  root.render(<Provider store={store}>{initApp}</Provider>);
+};
 
-ReactDOM.createRoot(document.getElementById('chat')).render(
-  <Provider store={store}>
-    <ChatProvider socket={socket}>
-      <AuthProvider>
-        <App />
-      </AuthProvider>
-    </ChatProvider>
-  </Provider>,
-);
+app();

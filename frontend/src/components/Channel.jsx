@@ -1,11 +1,14 @@
-import React from 'react';
-import { useSelector } from 'react-redux';
+import React, { useState } from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import cn from 'classnames';
 
 import { getCurrentChannelId } from '../slices/selectors';
+import { actions } from '../slices/channelsSlice';
 
 const Channel = ({ channel }) => {
   const currentChannelId = useSelector(getCurrentChannelId);
+  const dispatch = useDispatch();
+  const { setCurrentChannel } = actions;
 
   const classes = {
     'w-100': true,
@@ -17,7 +20,11 @@ const Channel = ({ channel }) => {
 
   return (
     <li className="nav-item w-100">
-      <button type="button" className={cn(classes)}>
+      <button
+        onClick={() => dispatch(setCurrentChannel(channel.id))}
+        type="button"
+        className={cn(classes)}
+      >
         <span className="me-1">#</span>
         {channel.name}
       </button>

@@ -3,6 +3,8 @@ import { useDispatch, useSelector } from 'react-redux';
 
 import { ChatContext } from '.';
 import { actions as messagesActions } from '../slices/messagesSlice';
+import { actions as channelsActions } from '../slices/channelsSlice';
+
 import { getCurrentChannelId } from '../slices/selectors';
 
 const TIMEOUT_REQUEST = 5000;
@@ -25,8 +27,20 @@ const ChatProvider = ({ socket, children }) => {
     });
   };
 
+  const addChannel = async ({ name }) => {
+    const channelData = {
+      name,
+    };
+
+    await socket.timeout(TIMEOUT_REQUEST).emit('newChannel', channelData);
+    await socket.on('newChannel', (payload) => {
+      dispatch(channelsActions.addChannel(payload));
+      dispatch(channelsActions.setCurrentChannel(data.id));
+    });
+  };
+
   return (
-    <ChatContext.Provider value={{ addMessage }}>
+    <ChatContext.Provider value={{ addMessage, addChannel }}>
       {children}
     </ChatContext.Provider>
   );
