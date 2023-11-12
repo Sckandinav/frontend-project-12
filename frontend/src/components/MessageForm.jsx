@@ -1,4 +1,4 @@
-import React, { useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import { Button, Form, InputGroup } from 'react-bootstrap';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
@@ -6,10 +6,14 @@ import { useTranslation } from 'react-i18next';
 
 import { useChatContext } from '../contexts';
 
-const MessageForm = () => {
+const MessageForm = (currentChannelId) => {
   const { addMessage } = useChatContext();
   const { t } = useTranslation();
   const inputRef = useRef(null);
+
+  useEffect(() => {
+    inputRef.current.focus();
+  }, [currentChannelId]);
 
   const validationSchema = Yup.object().shape({
     message: Yup.string().trim().required(),
@@ -21,7 +25,7 @@ const MessageForm = () => {
     onSubmit: async (value, { setSubmitting, resetForm }) => {
       try {
         await addMessage(value);
-        setSubmitting(false);
+        setSubmitting(true);
         resetForm();
       } catch (error) {
         setSubmitting(false);

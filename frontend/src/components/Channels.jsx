@@ -5,18 +5,7 @@ import { useTranslation } from 'react-i18next';
 
 import Channel from './Channel';
 import { getAllChannels } from '../slices/selectors';
-import getModal from '../components/modals/index';
-
-const renderModal = (modalInfo, hideModal, channels) => {
-  if (modalInfo.type === null) {
-    return null;
-  }
-  const Modal = getModal(modalInfo.type);
-
-  return (
-    <Modal modalInfo={modalInfo} hideModal={hideModal} channels={channels} />
-  );
-};
+import renderModal from './modals/Modal';
 
 const Channels = () => {
   const channels = useSelector(getAllChannels);

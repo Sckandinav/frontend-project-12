@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import { useFormik } from 'formik';
-import { Button, Modal, Form, FloatingLabel } from 'react-bootstrap';
+import { Button, Modal, Form } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import * as Yup from 'yup';
 
@@ -31,7 +31,7 @@ const Add = ({ hideModal, channels }) => {
     onSubmit: async (value, { setSubmitting }) => {
       try {
         await addChannel(value);
-        setSubmitting(false);
+        setSubmitting(true);
         hideModal();
       } catch (error) {
         setSubmitting(false);
@@ -68,18 +68,18 @@ const Add = ({ hideModal, channels }) => {
             <Form.Control.Feedback type="invalid">
               {formik.errors.name}
             </Form.Control.Feedback>
-            <div className="d-flex justify-content-end">
-              <Button className="me-2" variant="secondary" onClick={hideModal}>
-                {t('buttons.canсel')}
-              </Button>
-              <Button
-                variant="primary"
-                type="submit"
-                disabled={formik.isSubmitting}
-              >
-                {t('buttons.send')}
-              </Button>
-            </div>
+          </Form.Group>
+          <Form.Group className="mb-3 gap-2 d-flex justify-content-end">
+            <Button variant="secondary" onClick={hideModal}>
+              {t('buttons.canсel')}
+            </Button>
+            <Button
+              variant="primary"
+              type="submit"
+              disabled={formik.isSubmitting}
+            >
+              {t('buttons.send')}
+            </Button>
           </Form.Group>
         </Form>
       </Modal.Body>

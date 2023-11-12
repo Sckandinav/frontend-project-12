@@ -1,31 +1,42 @@
 import React from 'react';
-import { Modal, FormGroup } from 'react-bootstrap';
+import { Button, Form, Modal } from 'react-bootstrap';
+import { useTranslation } from 'react-i18next';
 
-const Remove = ({ modalInfo, hideModal, updateTasks }) => {
-  const { value } = modalInfo;
-  const { id } = value;
+import { useChatContext } from '../../contexts';
 
-  const removeTask = (e) => {
+const Remove = ({ modalInfo, hideModal }) => {
+  const { removeChannel } = useChatContext();
+  const { channel } = modalInfo;
+
+  const { t } = useTranslation();
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    updateTasks((draft) => draft.splice(id));
+    try {
+      await removeChannel(channel.id);
+      hideModal();
+    } catch (error) {
+      console.error(error.message);
+    }
   };
 
   return (
-    <Modal show onHide={hideModal}>
+    <Modal show centered onHide={hideModal}>
       <Modal.Header closeButton>
-        <Modal.Title>Remove</Modal.Title>
+        <Modal.Title>{t('headers.removeChannel')}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <FormGroup onSubmit={removeTask} className="mb-3">
-          <div className="d-flex justify-content-start">
-            <input
-              onClick={hideModal}
-              className="btn btn-danger"
-              type="button"
-              value="remove"
-            />
-          </div>
-        </FormGroup>
+        <p className="lead">{t('messages.removeWarning')}</p>
+        <Form onSubmit={handleSubmit}>
+          <Form.Group className="mb-3 gap-2 d-flex justify-content-end">
+            <Button variant="secondary" onClick={hideModal}>
+              {t('buttons.canсel')}
+            </Button>
+            <Button variant="danger" type="submit">
+              {t('buttons.remove')}
+            </Button>
+          </Form.Group>
+        </Form>
       </Modal.Body>
     </Modal>
   );

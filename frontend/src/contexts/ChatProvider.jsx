@@ -28,19 +28,24 @@ const ChatProvider = ({ socket, children }) => {
   };
 
   const addChannel = async ({ name }) => {
-    const channelData = {
-      name,
-    };
+    await socket.timeout(TIMEOUT_REQUEST).emit('newChannel', { name });
 
-    await socket.timeout(TIMEOUT_REQUEST).emit('newChannel', channelData);
     await socket.on('newChannel', (payload) => {
       dispatch(channelsActions.addChannel(payload));
-      dispatch(channelsActions.setCurrentChannel(data.id));
+      dispatch(channelsActions.setCurrentChannel(payload.id));
+    });
+  };
+
+  const removeChannel = async (id) => {
+    await socket.timeout(TIMEOUT_REQUEST).emit('removeChannel', { id });
+    await socket.on('removeChannel', (payload) => {
+      console.log('payload', payload);
+      dispatch(channelsActions.removeChannel(payload.id));
     });
   };
 
   return (
-    <ChatContext.Provider value={{ addMessage, addChannel }}>
+    <ChatContext.Provider value={{ addMessage, addChannel, removeChannel }}>
       {children}
     </ChatContext.Provider>
   );

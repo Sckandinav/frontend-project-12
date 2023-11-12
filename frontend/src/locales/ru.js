@@ -2,16 +2,18 @@ const ruLocales = {
   translation: {
     buttons: {
       canсel: 'Отменить',
+      channelActions: 'Управление каналом',
       login: 'Войти',
       logout: 'Выйти',
       send: 'Отправить',
       signup: 'Регистрация',
     },
     headers: {
-      login: 'Войти',
+      addChannel: 'Добавить канал',
       channels: 'Каналы',
       channelName: 'Имя канала',
-      addChannel: 'Добавить канал',
+      removeChannel: 'Удалить канал',
+      login: 'Войти',
     },
     errors: {
       loginValidation: 'Неверные имя пользователя или пароль',
@@ -26,6 +28,7 @@ const ruLocales = {
         count_many: '{{count}} сообщений',
       },
       noAccount: 'Нет аккаунта?',
+      removeWarning: 'Уверены?',
     },
     placeholders: {
       password: 'Пароль',
