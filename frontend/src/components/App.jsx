@@ -1,11 +1,13 @@
 import React from 'react';
-import { Container } from 'react-bootstrap';
 import {
   Route,
+  RouterProvider,
+  Navigate,
   createBrowserRouter,
   createRoutesFromElements,
-  RouterProvider,
 } from 'react-router-dom';
+
+import Header from './pages/Header';
 import ErrorPage from './pages/ErrorPage';
 import LoginPage from './pages/LoginPage';
 import ChatPage from './pages/ChatPage';
@@ -13,9 +15,11 @@ import SignUpPage from './pages/SignUpPage';
 import { useAuth } from '../contexts';
 
 const Root = () => {
-  const auth = useAuth();
-  return auth.loggedIn ? <ChatPage /> : <LoginPage />;
+  const { loggedIn } = useAuth();
+  console.log('loggedIn', loggedIn);
+  return loggedIn ? <ChatPage /> : <Navigate to="/login" />;
 };
+
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
@@ -28,9 +32,10 @@ const router = createBrowserRouter(
 
 const App = () => {
   return (
-    <Container fluid className="h-100">
-      <RouterProvider router={router}></RouterProvider>
-    </Container>
+    <div className="d-flex flex-column h-100">
+      <Header />
+      <RouterProvider router={router} />
+    </div>
   );
 };
 

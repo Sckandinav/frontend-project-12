@@ -27,11 +27,11 @@ const init = async () => {
 
   return (
     <I18nextProvider i18n={i18nextInstance}>
-      <ChatProvider socket={socket}>
-        <AuthProvider>
+      <AuthProvider>
+        <ChatProvider socket={socket}>
           <App />
-        </AuthProvider>
-      </ChatProvider>
+        </ChatProvider>
+      </AuthProvider>
     </I18nextProvider>
   );
 };

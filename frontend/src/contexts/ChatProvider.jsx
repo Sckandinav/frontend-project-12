@@ -2,6 +2,7 @@ import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
 import { ChatContext } from '.';
+import { useAuth } from '.';
 import { actions as messagesActions } from '../slices/messagesSlice';
 import { actions as channelsActions } from '../slices/channelsSlice';
 
@@ -12,8 +13,9 @@ const DEFAULT_CHANNEL = 1;
 
 const ChatProvider = ({ socket, children }) => {
   const currentChannelId = useSelector(getCurrentChannelId);
-  const { username } = JSON.parse(localStorage.getItem('user'));
+  const { getUserName } = useAuth();
   const dispatch = useDispatch();
+  const username = getUserName();
 
   const addMessage = async ({ message }) => {
     const messageData = {

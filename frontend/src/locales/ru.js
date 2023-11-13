@@ -6,7 +6,7 @@ const ruLocales = {
       login: 'Войти',
       logout: 'Выйти',
       send: 'Отправить',
-      signup: 'Регистрация',
+      signup: 'Зарегистрироваться',
     },
     headers: {
       addChannel: 'Добавить канал',
@@ -14,13 +14,17 @@ const ruLocales = {
       channelName: 'Имя канала',
       removeChannel: 'Удалить канал',
       renameChannel: 'Переименовать канал',
-      login: 'Войти',
+      signup: 'Регистрация',
+      title: 'Hexlet Chat',
     },
     errors: {
       loginValidation: 'Неверные имя пользователя или пароль',
-      required: 'Заполните это поле',
       length: 'От 3 до 20 символов',
+      passwordLength: 'Не менее 6 символов',
+      passwordConfirmation: 'Пароли должны совпадать',
       notOneOf: 'Должно быть уникальным',
+      userExists: 'Такой пользователь уже существует',
+      required: 'Обязательное поле',
     },
     messages: {
       counter: {
@@ -29,10 +33,13 @@ const ruLocales = {
         count_many: '{{count}} сообщений',
       },
       noAccount: 'Нет аккаунта?',
+      signup: 'Регистрация',
       removeWarning: 'Уверены?',
     },
     placeholders: {
+      user: 'Имя пользователя',
       password: 'Пароль',
+      passwordConfirmation: 'Подтвердите пароль',
       sendMessage: 'Введите сообщение...',
       username: 'Ваш ник',
     },
