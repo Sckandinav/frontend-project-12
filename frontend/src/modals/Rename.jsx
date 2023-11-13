@@ -74,11 +74,7 @@ const Rename = ({ modalInfo, hideModal, channels }) => {
             <Button variant="secondary" onClick={hideModal}>
               {t('buttons.canсel')}
             </Button>
-            <Button
-              variant="primary"
-              type="submit"
-              disabled={formik.isSubmitting}
-            >
+            <Button variant="info" type="submit" disabled={formik.isSubmitting}>
               {t('buttons.send')}
             </Button>
           </Form.Group>

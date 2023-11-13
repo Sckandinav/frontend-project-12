@@ -11,3 +11,16 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.form-control:focus {
+  border-color: #a3d1da;
+  box-shadow: 0 0 0 0.25rem #a3d1da7d;
+}
+
+.btn-outline-info {
+  --bs-btn-color: #168ea9;
+}
+
+a {
+  color: #168ea9;
+}

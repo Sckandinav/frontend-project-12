@@ -42,8 +42,8 @@ const Channels = () => {
         <b>{t('headers.channels')}</b>
         <Button
           onClick={() => showModal('adding')}
-          variant="outline-primary"
-          className="p-0 text-primary btn-group-vertical"
+          variant="outline-info"
+          className="p-0 text-info-60 btn-group-vertical"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"

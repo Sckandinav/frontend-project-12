@@ -15,9 +15,8 @@ import SignUpPage from './pages/SignUpPage';
 import { useAuth } from '../contexts';
 
 const Root = () => {
-  const { loggedIn } = useAuth();
-  console.log('loggedIn', loggedIn);
-  return loggedIn ? <ChatPage /> : <Navigate to="/login" />;
+  const { user } = useAuth();
+  return user ? <ChatPage /> : <Navigate to="/login" />;
 };
 
 const router = createBrowserRouter(

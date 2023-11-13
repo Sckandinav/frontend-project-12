@@ -17,6 +17,7 @@ import { useTranslation } from 'react-i18next';
 
 import { useAuth } from '../../contexts';
 import routes from '../../routes';
+import loginImage from '../../images/avatar.login.jpg';
 
 const LoginPage = () => {
   const { t } = useTranslation();
@@ -61,22 +62,21 @@ const LoginPage = () => {
   return (
     <Container fluid className="h-100">
       <Row className="justify-content-center align-items-center h-100">
-        <Col className="col-sm-4">
-          <Card className="shadow-sm">
+        <Col xs={12} md={8} xxl={6}>
+          <Card>
             <Card.Body className="row p-5">
               <Col
                 xs={12}
                 md={6}
                 className="d-flex align-items-center justify-content-center"
               >
-                <Image
-                  src="src/images/avatar.login.jpg"
-                  roundedCircle
-                  alt={t('headers.login')}
-                />
+                <Image src={loginImage} rounded alt={t('headers.login')} />
               </Col>
-              <Form onSubmit={formik.handleSubmit}>
-                <h1 className="text-center mb-4 h3">{t('headers.login')}</h1>
+              <Form
+                onSubmit={formik.handleSubmit}
+                className="col-12 col-md-6 mt-3 mt-mb-0"
+              >
+                <h1 className="text-center mb-4 h2">{t('headers.login')}</h1>
                 <FloatingLabel
                   controlId="username"
                   label={t('placeholders.username')}
@@ -115,8 +115,8 @@ const LoginPage = () => {
                 </FloatingLabel>
 
                 <Button
-                  variant="outline-primary"
-                  className="w-100 mb-3"
+                  variant="outline-info"
+                  className="w-100 mb-3 custom-button"
                   type="submit"
                 >
                   {t('buttons.login')}

@@ -6,6 +6,7 @@ import {
   Col,
   FloatingLabel,
   Form,
+  Image,
   Row,
 } from 'react-bootstrap';
 import { useLocation, useNavigate } from 'react-router-dom';
@@ -16,6 +17,7 @@ import axios from 'axios';
 
 import { useAuth } from '../../contexts';
 import routes from '../../routes';
+import signupImage from '../../images/avatar.signup.jpg';
 
 const SignUpPage = () => {
   const { t } = useTranslation();
@@ -68,11 +70,21 @@ const SignUpPage = () => {
   return (
     <Container fluid className="h-100">
       <Row className="justify-content-center align-items-center h-100">
-        <Col className="col-sm-4">
-          <Card className="shadow-sm">
+        <Col xs={12} md={8} xxl={6}>
+          <Card>
             <Card.Body className="row p-5">
-              <Form onSubmit={formik.handleSubmit}>
-                <h1 className="text-center mb-4 h3">{t('headers.signup')}</h1>
+              <Col
+                xs={12}
+                md={6}
+                className="d-flex align-items-center justify-content-center"
+              >
+                <Image src={signupImage} rounded alt={t('headers.signup')} />
+              </Col>
+              <Form
+                onSubmit={formik.handleSubmit}
+                className="col-12 col-md-6 mt-3 mt-mb-0"
+              >
+                <h1 className="text-center mb-4 h2">{t('headers.signup')}</h1>
                 <FloatingLabel
                   controlId="username"
                   label={t('placeholders.user')}
@@ -155,7 +167,7 @@ const SignUpPage = () => {
                   </Form.Control.Feedback>
                 </FloatingLabel>
                 <Button
-                  variant="outline-primary"
+                  variant="outline-info"
                   className="w-100 mb-3"
                   type="submit"
                 >
