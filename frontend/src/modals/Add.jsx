@@ -4,6 +4,7 @@ import { Button, Modal, Form } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import * as Yup from 'yup';
+import * as leoProfanity from 'leo-profanity';
 
 import { useChatContext } from '../../contexts';
 
@@ -23,15 +24,16 @@ const Add = ({ hideModal, channels }) => {
       .required(t('errors.required'))
       .min(3, t('errors.length'))
       .max(20, t('errors.length'))
+      .transform((value) => leoProfanity.clean(value))
       .notOneOf(channelsNames, t('errors.notOneOf')),
   });
 
   const formik = useFormik({
     initialValues: { name: '' },
     validationSchema,
-    onSubmit: async (value, { setSubmitting }) => {
+    onSubmit: async ({ name }, { setSubmitting }) => {
       try {
-        await addChannel(value);
+        await addChannel({ name: leoProfanity.clean(name) });
         setSubmitting(true);
         hideModal();
         toast.success(t('toastify.channelAdded'));

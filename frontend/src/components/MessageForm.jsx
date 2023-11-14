@@ -4,6 +4,7 @@ import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
+import * as leoProfanity from 'leo-profanity';
 
 import { useChatContext } from '../contexts';
 
@@ -23,9 +24,9 @@ const MessageForm = (currentChannelId) => {
     initialValues: {
       message: '',
     },
-    onSubmit: async (value, { setSubmitting, resetForm }) => {
+    onSubmit: async ({ message }, { setSubmitting, resetForm }) => {
       try {
-        await addMessage(value);
+        await addMessage({ message: leoProfanity.clean(message) });
         setSubmitting(true);
         resetForm();
       } catch (error) {

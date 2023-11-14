@@ -2,6 +2,7 @@ import React from 'react';
 import i18next from 'i18next';
 import { I18nextProvider, initReactI18next } from 'react-i18next';
 import { io } from 'socket.io-client';
+import * as leoProfanity from 'leo-profanity';
 
 import ChatProvider from './contexts/ChatProvider';
 import AuthProvider from './contexts/AuthProvider';
@@ -13,6 +14,9 @@ const DEFAULT_LANGUAGE = 'ru';
 const socket = io();
 
 const init = async () => {
+  const russianDictionary = leoProfanity.getDictionary('ru');
+  leoProfanity.add(russianDictionary);
+
   const i18nextInstance = i18next.createInstance();
 
   await i18nextInstance.use(initReactI18next).init({

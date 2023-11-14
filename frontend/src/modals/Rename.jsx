@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useFormik } from 'formik';
 import { toast } from 'react-toastify';
 import * as Yup from 'yup';
+import * as leoProfanity from 'leo-profanity';
 
 import { useChatContext } from '../../contexts';
 
@@ -26,14 +27,15 @@ const Rename = ({ modalInfo, hideModal, channels }) => {
       .required(t('errors.required'))
       .min(3, t('errors.length'))
       .max(20, t('errors.length'))
+      .transform((value) => leoProfanity.clean(value))
       .notOneOf(channelsNames, t('errors.notOneOf')),
   });
 
   const formik = useFormik({
     initialValues: { id: channel.id, name: channel.name },
-    onSubmit: async (values, { setSubmitting }) => {
+    onSubmit: async ({ id, name }, { setSubmitting }) => {
       try {
-        await renameChannel(values);
+        await renameChannel({ id, name: leoProfanity.clean(name) });
         setSubmitting(true);
         hideModal();
         toast.success(t('toastify.channelRenamed'));
