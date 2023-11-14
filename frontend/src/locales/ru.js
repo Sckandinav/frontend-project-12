@@ -22,6 +22,7 @@ const ruLocales = {
       length: 'От 3 до 20 символов',
       passwordLength: 'Не менее 6 символов',
       passwordConfirmation: 'Пароли должны совпадать',
+      netWorkError: 'Ошибка соединения',
       notOneOf: 'Должно быть уникальным',
       userExists: 'Такой пользователь уже существует',
       required: 'Обязательное поле',
@@ -42,6 +43,11 @@ const ruLocales = {
       passwordConfirmation: 'Подтвердите пароль',
       sendMessage: 'Введите сообщение...',
       username: 'Ваш ник',
+    },
+    toastify: {
+      channelAdded: 'Канал создан',
+      channelRenamed: 'Канал переименован',
+      channelRemoved: 'Канал удален',
     },
   },
 };

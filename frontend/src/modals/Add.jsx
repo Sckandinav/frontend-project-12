@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { useFormik } from 'formik';
 import { Button, Modal, Form } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
 import * as Yup from 'yup';
 
 import { useChatContext } from '../../contexts';
@@ -33,8 +34,10 @@ const Add = ({ hideModal, channels }) => {
         await addChannel(value);
         setSubmitting(true);
         hideModal();
+        toast.success(t('toastify.channelAdded'));
       } catch (error) {
         setSubmitting(false);
+        toast.error(t('errors.netWorkError'));
         console.error(error.message);
       } finally {
         inputRef.current.focus();

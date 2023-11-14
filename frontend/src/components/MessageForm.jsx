@@ -3,6 +3,7 @@ import { Button, Form, InputGroup } from 'react-bootstrap';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
 
 import { useChatContext } from '../contexts';
 
@@ -29,6 +30,7 @@ const MessageForm = (currentChannelId) => {
         resetForm();
       } catch (error) {
         setSubmitting(false);
+        toast.error(t('errors.netWorkError'));
         console.error(error.message);
       } finally {
         inputRef.current.focus();

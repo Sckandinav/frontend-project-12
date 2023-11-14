@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { useFormik } from 'formik';
+import { toast } from 'react-toastify';
 import * as Yup from 'yup';
 
 import { useChatContext } from '../../contexts';
@@ -35,8 +36,10 @@ const Rename = ({ modalInfo, hideModal, channels }) => {
         await renameChannel(values);
         setSubmitting(true);
         hideModal();
+        toast.success(t('toastify.channelRenamed'));
       } catch (error) {
         setSubmitting(false);
+        toast.error(t('errors.netWorkError'));
         console.error(error.message);
       }
     },

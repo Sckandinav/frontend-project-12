@@ -6,6 +6,8 @@ import {
   createBrowserRouter,
   createRoutesFromElements,
 } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import Header from './pages/Header';
 import ErrorPage from './pages/ErrorPage';
@@ -31,10 +33,24 @@ const router = createBrowserRouter(
 
 const App = () => {
   return (
-    <div className="d-flex flex-column h-100">
-      <Header />
-      <RouterProvider router={router} />
-    </div>
+    <>
+      <div className="d-flex flex-column h-100">
+        <Header />
+        <RouterProvider router={router} />
+      </div>
+      <ToastContainer
+        position="top-right"
+        autoClose={2000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="light"
+      />
+    </>
   );
 };
 

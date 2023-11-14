@@ -9,10 +9,11 @@ import {
   Image,
   Row,
 } from 'react-bootstrap';
-import { useLocation, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
 import axios from 'axios';
 
 import { useAuth } from '../../contexts';
@@ -61,7 +62,7 @@ const SignUpPage = () => {
           inputRef.current.select();
           return;
         }
-        throw error;
+        toast.error(t('errors.netWorkError'));
       }
     },
     validationSchema,

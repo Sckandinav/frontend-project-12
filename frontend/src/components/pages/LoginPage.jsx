@@ -14,6 +14,7 @@ import {
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
 
 import { useAuth } from '../../contexts';
 import routes from '../../routes';
@@ -51,7 +52,7 @@ const LoginPage = () => {
           inputRef.current.select();
           return;
         }
-        throw error;
+        toast.error(t('errors.netWorkError'));
       }
     },
     validationSchema,
