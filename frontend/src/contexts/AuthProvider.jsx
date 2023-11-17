@@ -10,32 +10,12 @@ const AuthProvider = ({ children }) => {
     setUser(data);
   };
 
-  const signUp = (data) => {
-    localStorage.setItem('user', JSON.stringify(data));
-    setUser(data);
-  };
-
   const logOut = () => {
     localStorage.removeItem('user');
     setUser(null);
   };
-
-  const getUserName = () => {
-    const username = currentUser ? currentUser.username : null;
-    return username;
-  };
-
-  const getAuthHeader = () => {
-    if (currentUser && currentUser.token) {
-      return { Authorization: `Bearer ${currentUser.token}` };
-    }
-    return {};
-  };
-
   return (
-    <AuthContext.Provider
-      value={{ user, logIn, signUp, logOut, getUserName, getAuthHeader }}
-    >
+    <AuthContext.Provider value={{ user, logIn, logOut }}>
       {children}
     </AuthContext.Provider>
   );

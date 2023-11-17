@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { useFormik } from 'formik';
 import { Button, Modal, Form } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
+import { useRollbar } from '@rollbar/react';
 import { toast } from 'react-toastify';
 import * as Yup from 'yup';
 import * as leoProfanity from 'leo-profanity';
@@ -12,6 +13,7 @@ const Add = ({ hideModal, channels }) => {
   const { addChannel } = useChatContext();
   const { t } = useTranslation();
   const inputRef = useRef(null);
+  const rollbar = useRollbar();
   const channelsNames = channels.map((channel) => channel.name);
 
   useEffect(() => {
@@ -41,7 +43,7 @@ const Add = ({ hideModal, channels }) => {
       } catch (error) {
         setSubmitting(false);
         toast.error(t('errors.netWorkError'));
-        console.error(error.message);
+        rollbar.error('AddChannel', error.message);
       } finally {
         inputRef.current.focus();
       }

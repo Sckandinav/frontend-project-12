@@ -14,6 +14,7 @@ import {
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 import { useTranslation } from 'react-i18next';
+import { useRollbar } from '@rollbar/react';
 import { toast } from 'react-toastify';
 
 import { useAuth } from '../../contexts';
@@ -21,11 +22,12 @@ import routes from '../../routes';
 import loginImage from '../../images/avatar.login.jpg';
 
 const LoginPage = () => {
+  const { logIn } = useAuth();
   const { t } = useTranslation();
   const inputRef = useRef();
-  const { logIn } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
+  const rollbar = useRollbar();
   const [authFailed, setAuthFailed] = useState(false);
 
   const validationSchema = Yup.object().shape({
@@ -53,6 +55,7 @@ const LoginPage = () => {
           return;
         }
         toast.error(t('errors.netWorkError'));
+        rollbar.error('Authentication', error.message);
       }
     },
     validationSchema,

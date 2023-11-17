@@ -9,16 +9,15 @@ import { actions as channelsActions } from '../slices/channelsSlice';
 const TIMEOUT_REQUEST = 5000;
 
 const ChatProvider = ({ socket, children }) => {
+  const { user } = useAuth();
   const dispatch = useDispatch();
   const currentChannelId = useSelector(getCurrentChannelId);
-  const { getUserName } = useAuth();
-  const username = getUserName();
 
   const addMessage = async ({ message }) => {
     const messageData = {
       channelId: currentChannelId,
       text: message,
-      user: username,
+      username: user.username,
     };
     await socket.timeout(TIMEOUT_REQUEST).emit('newMessage', messageData);
   };

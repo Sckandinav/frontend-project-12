@@ -1,6 +1,7 @@
 const ruLocales = {
   translation: {
     buttons: {
+      backHome: 'Вернуться на главную',
       canсel: 'Отменить',
       channelActions: 'Управление каналом',
       login: 'Войти',
@@ -9,6 +10,7 @@ const ruLocales = {
       signup: 'Зарегистрироваться',
     },
     headers: {
+      404: '404',
       addChannel: 'Добавить канал',
       channels: 'Каналы',
       channelName: 'Имя канала',
@@ -35,6 +37,7 @@ const ruLocales = {
         count_many: '{{count}} сообщений',
       },
       noAccount: 'Нет аккаунта?',
+      pageNotFound: 'Страница не найдена',
       signup: 'Регистрация',
       removeWarning: 'Уверены?',
     },

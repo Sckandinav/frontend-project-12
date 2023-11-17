@@ -5,6 +5,7 @@ import { useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
+import { useRollbar } from '@rollbar/react';
 
 import routes from '../../routes';
 import Channels from '../Channels';
@@ -13,12 +14,20 @@ import { actions as channelsActions } from '../../slices/channelsSlice';
 import { actions as messagesActions } from '../../slices/messagesSlice';
 import { useAuth } from '../../contexts';
 
+const getAuthHeader = (currentUser) => {
+  if (currentUser && currentUser.token) {
+    return { Authorization: `Bearer ${currentUser.token}` };
+  }
+  return {};
+};
+
 const ChatPage = () => {
-  const dispatch = useDispatch();
-  const { getAuthHeader, logOut } = useAuth();
-  const headers = getAuthHeader();
+  const { user, logOut } = useAuth();
   const { t } = useTranslation();
+  const headers = getAuthHeader(user);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const rollbar = useRollbar();
 
   useEffect(() => {
     async function fetchData() {
@@ -33,8 +42,8 @@ const ChatPage = () => {
         if (error.isAxiosError && error.response.status === 401) {
           logOut();
         }
-        console.error(error);
         toast.error(t('toastify.authError'));
+        rollbar.error('Error fetching data', error.message);
         navigate(routes.rootPage);
       }
     }
