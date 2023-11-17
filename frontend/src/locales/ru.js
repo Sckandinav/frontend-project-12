@@ -26,6 +26,7 @@ const ruLocales = {
       notOneOf: 'Должно быть уникальным',
       userExists: 'Такой пользователь уже существует',
       required: 'Обязательное поле',
+      userExists: 'Такой пользователь уже существует',
     },
     messages: {
       counter: {
@@ -48,6 +49,8 @@ const ruLocales = {
       channelAdded: 'Канал создан',
       channelRenamed: 'Канал переименован',
       channelRemoved: 'Канал удален',
+      onConnect: 'Связь с сервером установлена',
+      onDisconnect: 'Связь с сервером потеряна',
     },
   },
 };

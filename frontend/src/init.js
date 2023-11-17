@@ -1,18 +1,18 @@
 import React from 'react';
-import i18next from 'i18next';
-import { I18nextProvider, initReactI18next } from 'react-i18next';
-import { io } from 'socket.io-client';
+import { I18nextProvider } from 'react-i18next';
 import * as leoProfanity from 'leo-profanity';
 
 import ChatProvider from './contexts/ChatProvider';
 import AuthProvider from './contexts/AuthProvider';
 import App from './components/App';
-import resources from './locales/index';
 import { Provider as RollbarProvider, ErrorBoundary } from '@rollbar/react';
 
-const DEFAULT_LANGUAGE = 'ru';
+import initI18Next from './i18next';
+import store from './slices/store';
+import { actions as messagesActions } from './slices/messagesSlice';
+import { actions as channelsActions } from './slices/channelsSlice';
 
-const init = async () => {
+const initApp = async (socket) => {
   const rollbarConfig = {
     accessToken: 'POST_CLIENT_ITEM_ACCESS_TOKEN',
     captureUncaught: true,
@@ -20,22 +20,20 @@ const init = async () => {
     environment: 'production',
   };
 
-  const i18nextInstance = i18next.createInstance();
-
-  await i18nextInstance.use(initReactI18next).init({
-    lng: DEFAULT_LANGUAGE,
-    fallbackLng: DEFAULT_LANGUAGE,
-    debug: false,
-    resources,
-    interpolation: {
-      escapeValue: false,
-    },
-  });
-
-  const socket = io();
-
+  const i18nextInstance = await initI18Next();
   const russianDictionary = leoProfanity.getDictionary('ru');
   leoProfanity.add(russianDictionary);
+
+  socket.on('newMessage', (payload) => {
+    store.dispatch(messagesActions.addMessage(payload));
+  });
+  socket.on('newChannel', (payload) => {
+    store.dispatch(channelsActions.addChannel(payload));
+  });
+
+  socket.on('removeChannel', (payload) =>
+    store.dispatch(channelsActions.removeChannel(payload.id)),
+  );
 
   return (
     <RollbarProvider config={rollbarConfig}>
@@ -52,4 +50,4 @@ const init = async () => {
   );
 };
 
-export default init;
+export default initApp;

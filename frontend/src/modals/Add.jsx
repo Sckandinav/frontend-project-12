@@ -32,8 +32,9 @@ const Add = ({ hideModal, channels }) => {
     initialValues: { name: '' },
     validationSchema,
     onSubmit: async ({ name }, { setSubmitting }) => {
+      const newChannel = { name: leoProfanity.clean(name) };
       try {
-        await addChannel({ name: leoProfanity.clean(name) });
+        await addChannel(newChannel);
         setSubmitting(true);
         hideModal();
         toast.success(t('toastify.channelAdded'));

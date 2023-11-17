@@ -3,30 +3,44 @@ import {
   Route,
   RouterProvider,
   Navigate,
+  useLocation,
   createBrowserRouter,
   createRoutesFromElements,
 } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-import Header from './pages/Header';
+import Layout from './pages/Layout';
 import ErrorPage from './pages/ErrorPage';
 import LoginPage from './pages/LoginPage';
 import ChatPage from './pages/ChatPage';
 import SignUpPage from './pages/SignUpPage';
 import { useAuth } from '../contexts';
+import routes from '../routes';
 
-const Root = () => {
+const Root = ({ children }) => {
   const { user } = useAuth();
-  return user ? <ChatPage /> : <Navigate to="/login" />;
+  const location = useLocation();
+  return user ? children : <Navigate to="/login" state={{ from: location }} />;
 };
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
-      <Route path="/" element={<Root />} errorElement={<ErrorPage />} />
-      <Route path="login" element={<LoginPage />} />
-      <Route path="signup" element={<SignUpPage />} />
+      <Route path={routes.rootPage} element={<Layout />}>
+        <Route
+          index
+          element={
+            <Root>
+              <ChatPage />
+            </Root>
+          }
+        />
+        <Route path={routes.loginPage} element={<LoginPage />} />
+        <Route path={routes.signupPage} element={<SignUpPage />} />
+        <Route path={routes.notFound} element={<ErrorPage />} />
+      </Route>
+      ,
     </>,
   ),
 );
@@ -35,7 +49,6 @@ const App = () => {
   return (
     <>
       <div className="d-flex flex-column h-100">
-        <Header />
         <RouterProvider router={router} />
       </div>
       <ToastContainer

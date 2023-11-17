@@ -41,7 +41,7 @@ const LoginPage = () => {
     onSubmit: async (values, { setSubmitting }) => {
       setAuthFailed(false);
       try {
-        const { data } = await axios.post(routes.login, values);
+        const { data } = await axios.post(routes.loginApi, values);
         logIn(data);
         const { from } = location.state || { from: { pathname: '/' } };
         navigate(from);

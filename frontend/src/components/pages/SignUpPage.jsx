@@ -52,9 +52,9 @@ const SignUpPage = () => {
     },
     onSubmit: async (values, { setSubmitting }) => {
       try {
-        const { data } = await axios.post(routes.signup, values);
+        const { data } = await axios.post(routes.signupApi, values);
         signUp(data);
-        navigate('/');
+        navigate(routes.signupPage);
       } catch (error) {
         setSubmitting(false);
         if (error.isAxiosError && error.response.status === 409) {

@@ -3,14 +3,16 @@ import './index.css';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { Provider } from 'react-redux';
+import { io } from 'socket.io-client';
 
 import store from './slices/store';
-import init from './init';
+import initApp from './init';
 
 const app = async () => {
+  const socket = io();
   const root = ReactDOM.createRoot(document.getElementById('chat'));
-  const initApp = await init();
-  root.render(<Provider store={store}>{initApp}</Provider>);
+  const init = await initApp(socket);
+  root.render(<Provider store={store}>{init}</Provider>);
 };
 
 app();

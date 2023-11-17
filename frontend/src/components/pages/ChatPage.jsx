@@ -2,6 +2,10 @@ import axios from 'axios';
 import React, { useEffect } from 'react';
 import { Container, Row } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
+import { useTranslation } from 'react-i18next';
+import { toast } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
+
 import routes from '../../routes';
 import Channels from '../Channels';
 import Messages from '../Messages';
@@ -11,20 +15,32 @@ import { useAuth } from '../../contexts';
 
 const ChatPage = () => {
   const dispatch = useDispatch();
-  const { getAuthHeader } = useAuth();
+  const { getAuthHeader, logOut } = useAuth();
+  const headers = getAuthHeader();
+  const { t } = useTranslation();
+  const navigate = useNavigate();
+
   useEffect(() => {
     async function fetchData() {
-      const { data } = await axios.get(routes.data, {
-        headers: getAuthHeader(),
-      });
-      const { channels, messages, currentChannelId } = data || {};
+      try {
+        const { data } = await axios.get(routes.dataApi, { headers });
+        const { channels, messages, currentChannelId } = data || {};
 
-      dispatch(channelsActions.addChannels(channels));
-      dispatch(channelsActions.setCurrentChannel(currentChannelId));
-      dispatch(messagesActions.addMessages(messages));
+        dispatch(channelsActions.addChannels(channels));
+        dispatch(channelsActions.setCurrentChannel(currentChannelId));
+        dispatch(messagesActions.addMessages(messages));
+      } catch (error) {
+        if (error.isAxiosError && error.response.status === 401) {
+          logOut();
+        }
+        console.error(error);
+        toast.error(t('toastify.authError'));
+        navigate(routes.rootPage);
+      }
     }
     fetchData();
-  }, [dispatch]);
+  }, [dispatch, headers, logOut, navigate, t]);
+
   return (
     <Container className="h-100 my-4 overflow-hidden rounded shadow">
       <Row className="h-100 bg-white flex-md-row">
