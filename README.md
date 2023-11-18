@@ -9,7 +9,7 @@
 
 <a href="https://codeclimate.com/github/Sckandinav/frontend-project-12/maintainability"><img src="https://api.codeclimate.com/v1/badges/4498c84a16b06132cea7/maintainability" /></a>
 
-[![LintTest](https://github.com/Sckandinav/frontend-project-12/workflows/github-actions.yml/badge.svg)](https://github.com/Sckandinav/frontend-project-12/actions)
+[![github-actions](https://github.com/Sckandinav/frontend-project-12/actions/workflows/github-actions.yml/badge.svg)](https://github.com/Sckandinav/frontend-project-12/actions/workflows/github-actions.yml)
 
 
 ----
