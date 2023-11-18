@@ -27,9 +27,7 @@ const Channel = ({ channel, showModal }) => {
         {channel.removable ? (
           <>
             <Dropdown.Toggle variant={variant} split className="border-0">
-              <span className="visually-hidden">
-                {t('buttons.channelActions')}
-              </span>
+              <span className="visually-hidden">{t('buttons.channelActions')}</span>
             </Dropdown.Toggle>
             <Dropdown.Menu>
               <Dropdown.Item onClick={() => showModal('removing', channel)}>
@@ -45,4 +43,5 @@ const Channel = ({ channel, showModal }) => {
     </li>
   );
 };
+
 export default Channel;

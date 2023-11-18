@@ -3,9 +3,7 @@ import React, { useEffect } from 'react';
 import { Container, Row } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
-import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
-import { useRollbar } from '@rollbar/react';
 
 import routes from '../../routes';
 import Channels from '../Channels';
@@ -27,7 +25,6 @@ const ChatPage = () => {
   const headers = getAuthHeader(user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const rollbar = useRollbar();
 
   useEffect(() => {
     async function fetchData() {
@@ -40,11 +37,8 @@ const ChatPage = () => {
         dispatch(messagesActions.addMessages(messages));
       } catch (error) {
         if (error.isAxiosError && error.response.status === 401) {
-          logOut();
+          navigate(routes.loginPage);
         }
-        toast.error(t('toastify.authError'));
-        rollbar.error('Error fetching data', error.message);
-        navigate(routes.rootPage);
       }
     }
     fetchData();

@@ -1,16 +1,14 @@
 import React from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import { useRollbar } from '@rollbar/react';
-import { useChatContext } from '../../contexts';
 import { toast } from 'react-toastify';
+
+import { useChatContext } from '../../contexts';
 
 const Remove = ({ modalInfo, hideModal }) => {
   const { removeChannel } = useChatContext();
   const { channel } = modalInfo;
-
   const { t } = useTranslation();
-  const rollbar = useRollbar();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -20,7 +18,6 @@ const Remove = ({ modalInfo, hideModal }) => {
       toast.success(t('toastify.channelRemoved'));
     } catch (error) {
       toast.error(t('errors.netWorkError'));
-      rollbar.error('RemoveChannel', error.message);
     }
   };
 

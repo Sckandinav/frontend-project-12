@@ -1,21 +1,13 @@
-import axios from 'axios';
 import React, { useState, useRef } from 'react';
 import { useFormik } from 'formik';
 import {
-  Button,
-  Card,
-  Col,
-  Container,
-  Form,
-  FloatingLabel,
-  Image,
-  Row,
+  Button, Card, Col, Container, Form, FloatingLabel, Image, Row,
 } from 'react-bootstrap';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import * as Yup from 'yup';
 import { useTranslation } from 'react-i18next';
-import { useRollbar } from '@rollbar/react';
 import { toast } from 'react-toastify';
+import axios from 'axios';
+import * as Yup from 'yup';
 
 import { useAuth } from '../../contexts';
 import routes from '../../routes';
@@ -27,7 +19,7 @@ const LoginPage = () => {
   const inputRef = useRef();
   const navigate = useNavigate();
   const location = useLocation();
-  const rollbar = useRollbar();
+
   const [authFailed, setAuthFailed] = useState(false);
 
   const validationSchema = Yup.object().shape({
@@ -42,10 +34,11 @@ const LoginPage = () => {
     },
     onSubmit: async (values, { setSubmitting }) => {
       setAuthFailed(false);
+
       try {
         const { data } = await axios.post(routes.loginApi, values);
         logIn(data);
-        const { from } = location.state || { from: { pathname: '/' } };
+        const { from } = location.state || { from: { pathname: routes.rootPage } };
         navigate(from);
       } catch (error) {
         setSubmitting(false);
@@ -55,13 +48,10 @@ const LoginPage = () => {
           return;
         }
         toast.error(t('errors.netWorkError'));
-        rollbar.error('Authentication', error.message);
       }
     },
     validationSchema,
   });
-
-  console.log(formik);
 
   return (
     <Container fluid className="h-100">
@@ -69,17 +59,10 @@ const LoginPage = () => {
         <Col xs={12} md={8} xxl={6}>
           <Card>
             <Card.Body className="row p-5">
-              <Col
-                xs={12}
-                md={6}
-                className="d-flex align-items-center justify-content-center"
-              >
+              <Col xs={12} md={6} className="d-flex align-items-center justify-content-center">
                 <Image src={loginImage} rounded alt={t('headers.login')} />
               </Col>
-              <Form
-                onSubmit={formik.handleSubmit}
-                className="col-12 col-md-6 mt-3 mt-mb-0"
-              >
+              <Form onSubmit={formik.handleSubmit} className="col-12 col-md-6 mt-3 mt-mb-0">
                 <h1 className="text-center mb-4 h2">{t('headers.login')}</h1>
                 <FloatingLabel
                   controlId="username"
@@ -94,7 +77,9 @@ const LoginPage = () => {
                     onChange={formik.handleChange}
                     value={formik.values.username}
                     isInvalid={authFailed}
+                    disabled={formik.isSubmitting}
                     autoFocus
+                    ref={inputRef}
                   />
                 </FloatingLabel>
 
@@ -113,24 +98,22 @@ const LoginPage = () => {
                     isInvalid={authFailed}
                     disabled={formik.isSubmitting}
                   />
+
                   <Form.Control.Feedback type="invalid" tooltip>
                     {t('errors.loginValidation')}
                   </Form.Control.Feedback>
                 </FloatingLabel>
 
-                <Button
-                  variant="outline-info"
-                  className="w-100 mb-3 custom-button"
-                  type="submit"
-                >
+                <Button variant="outline-info" className="w-100 mb-3 custom-button" type="submit">
                   {t('buttons.login')}
                 </Button>
               </Form>
             </Card.Body>
             <Card.Footer className="p-4">
               <div className="text-center">
-                <span>{t('messages.noAccount')}</span>{' '}
-                <Link to="/signup">{t('messages.signup')}</Link>
+                <span>{t('messages.noAccount')}</span>
+                {' '}
+                <Link to={routes.signupPage}>{t('messages.signup')}</Link>
               </div>
             </Card.Footer>
           </Card>

@@ -1,12 +1,12 @@
+/* eslint-disable no-param-reassign */
+
 import { createSlice, createEntityAdapter } from '@reduxjs/toolkit';
 
 export const channelsAdapter = createEntityAdapter();
 
 const DEFAULT_CHANNEL = 1;
 
-const initialState = channelsAdapter.getInitialState({
-  currentChannelId: DEFAULT_CHANNEL,
-});
+const initialState = channelsAdapter.getInitialState({ currentChannelId: DEFAULT_CHANNEL });
 
 const channelsSlice = createSlice({
   name: 'channels',
@@ -14,6 +14,7 @@ const channelsSlice = createSlice({
   reducers: {
     addChannels: channelsAdapter.addMany,
     addChannel: channelsAdapter.addOne,
+    renameChannel: channelsAdapter.setOne,
     setCurrentChannel: (state, { payload }) => {
       state.currentChannelId = payload;
     },
@@ -25,8 +26,7 @@ const channelsSlice = createSlice({
     },
   },
 });
+
 export const { actions } = channelsSlice;
-export const selectors = channelsAdapter.getSelectors(
-  (state) => state.channels,
-);
+export const selectors = channelsAdapter.getSelectors((state) => state.channels);
 export default channelsSlice.reducer;

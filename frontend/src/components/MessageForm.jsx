@@ -20,6 +20,7 @@ const MessageForm = (currentChannelId) => {
   const validationSchema = Yup.object().shape({
     message: Yup.string().trim().required(),
   });
+
   const formik = useFormik({
     initialValues: {
       message: '',
@@ -39,17 +40,15 @@ const MessageForm = (currentChannelId) => {
     },
     validationSchema,
   });
+
   return (
     <div className="mt-auto px-5 py-3">
-      <Form
-        noValidate
-        onSubmit={formik.handleSubmit}
-        className="py-1 border rounded-3"
-      >
+      <Form noValidate onSubmit={formik.handleSubmit} className="py-1 border rounded-3">
         <InputGroup>
           <Form.Control
             type="text"
             name="message"
+            aria-label={t('headers.newMessage')}
             placeholder={t('placeholders.sendMessage')}
             className="border-0 p-0 ps-2"
             onChange={formik.handleChange}
@@ -58,7 +57,7 @@ const MessageForm = (currentChannelId) => {
             autoFocus
           />
           <Button
-            variant="ogroup-vertical"
+            variant="group-vertical"
             type="submit"
             className="border-0"
             disabled={formik.isSubmitting || formik.values.message.length === 0}
@@ -83,4 +82,5 @@ const MessageForm = (currentChannelId) => {
     </div>
   );
 };
+
 export default MessageForm;

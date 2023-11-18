@@ -6,4 +6,6 @@ const useAuth = () => useContext(AuthContext);
 const ChatContext = createContext({});
 const useChatContext = () => useContext(ChatContext);
 
-export { AuthContext, useAuth, ChatContext, useChatContext };
+export {
+  AuthContext, useAuth, ChatContext, useChatContext,
+};

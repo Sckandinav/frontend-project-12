@@ -21,50 +21,45 @@ import routes from '../routes';
 const Root = ({ children }) => {
   const { user } = useAuth();
   const location = useLocation();
-  return user ? children : <Navigate to="/login" state={{ from: location }} />;
+  return user ? children : <Navigate to={routes.loginPage} state={{ from: location }} />;
 };
 
 const router = createBrowserRouter(
   createRoutesFromElements(
-    <>
-      <Route path={routes.rootPage} element={<Layout />}>
-        <Route
-          index
-          element={
-            <Root>
-              <ChatPage />
-            </Root>
-          }
-        />
-        <Route path={routes.loginPage} element={<LoginPage />} />
-        <Route path={routes.signupPage} element={<SignUpPage />} />
-        <Route path={routes.notFound} element={<ErrorPage />} />
-      </Route>
-      ,
-    </>,
+    <Route path={routes.rootPage} element={<Layout />}>
+      <Route
+        index
+        element={(
+          <Root>
+            <ChatPage />
+          </Root>
+        )}
+      />
+      <Route path={routes.loginPage} element={<LoginPage />} />
+      <Route path={routes.signupPage} element={<SignUpPage />} />
+      <Route path="*" element={<ErrorPage />} />
+    </Route>,
   ),
 );
 
-const App = () => {
-  return (
-    <>
-      <div className="d-flex flex-column h-100">
-        <RouterProvider router={router} />
-      </div>
-      <ToastContainer
-        position="top-right"
-        autoClose={2000}
-        hideProgressBar={false}
-        newestOnTop={false}
-        closeOnClick
-        rtl={false}
-        pauseOnFocusLoss
-        draggable
-        pauseOnHover
-        theme="light"
-      />
-    </>
-  );
-};
+const App = () => (
+  <>
+    <div className="d-flex flex-column h-100">
+      <RouterProvider router={router} />
+    </div>
+    <ToastContainer
+      position="top-right"
+      autoClose={2000}
+      hideProgressBar={false}
+      newestOnTop={false}
+      closeOnClick
+      rtl={false}
+      pauseOnFocusLoss
+      draggable
+      pauseOnHover
+      theme="light"
+    />
+  </>
+);
 
 export default App;

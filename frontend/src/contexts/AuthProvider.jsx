@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { AuthContext } from '.';
 
 const AuthProvider = ({ children }) => {
   const currentUser = JSON.parse(localStorage.getItem('user'));
-  const [user, setUser] = useState(currentUser ? currentUser : null);
+  const [user, setUser] = useState(currentUser || null);
 
   const logIn = (data) => {
     localStorage.setItem('user', JSON.stringify(data));
@@ -14,11 +14,10 @@ const AuthProvider = ({ children }) => {
     localStorage.removeItem('user');
     setUser(null);
   };
-  return (
-    <AuthContext.Provider value={{ user, logIn, logOut }}>
-      {children}
-    </AuthContext.Provider>
-  );
+
+  const value = useMemo(() => ({ user, logIn, logOut }), [user]);
+
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 };
 
 export default AuthProvider;

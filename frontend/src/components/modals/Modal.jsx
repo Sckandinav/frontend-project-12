@@ -8,9 +8,7 @@ const renderModal = (modalInfo, hideModal, channels) => {
   }
   const Modal = getModal(modalInfo.type);
 
-  return (
-    <Modal modalInfo={modalInfo} hideModal={hideModal} channels={channels} />
-  );
+  return <Modal modalInfo={modalInfo} hideModal={hideModal} channels={channels} />;
 };
 
 export default renderModal;

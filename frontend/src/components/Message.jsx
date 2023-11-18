@@ -5,18 +5,23 @@ const Message = ({ message }) => {
   const { user } = useAuth();
   const isCurrentUser = message.username === user.username;
 
-  return(
-    <div
-      className={`mb-2 p-3 py-2 text-break rounded-4 border border-info message bg-${
-        isCurrentUser ? 'light' : 'info'
-      }`}
-    >
-      <b>
-        {message.username}
-        {': '}
-      </b>
-      {message.text}
-    </div>,
+  return (
+    <div className={`d-flex mb-2 justify-content-${isCurrentUser ? 'end' : 'start'}`}>
+      <div>
+        <div
+          className={`p-3 py-2 text-break rounded-4 bg-${
+            isCurrentUser ? 'light' : 'info'
+          } border border-info`}
+        >
+          {' '}
+          <b>
+            {message.username}
+            {': '}
+          </b>
+          {message.text}
+        </div>
+      </div>
+    </div>
   );
 };
 

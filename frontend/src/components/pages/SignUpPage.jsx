@@ -1,20 +1,12 @@
 import React, { useRef, useState } from 'react';
 import {
-  Button,
-  Card,
-  Container,
-  Col,
-  FloatingLabel,
-  Form,
-  Image,
-  Row,
+  Button, Card, Container, Col, FloatingLabel, Form, Image, Row,
 } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
-import * as Yup from 'yup';
 import { useTranslation } from 'react-i18next';
-import { useRollbar } from '@rollbar/react';
 import { toast } from 'react-toastify';
+import * as Yup from 'yup';
 import axios from 'axios';
 
 import { useAuth } from '../../contexts';
@@ -26,7 +18,6 @@ const SignUpPage = () => {
   const { t } = useTranslation();
   const inputRef = useRef();
   const navigate = useNavigate();
-  const rollbar = useRollbar();
 
   const [authFailed, setAuthFailed] = useState(false);
 
@@ -36,10 +27,7 @@ const SignUpPage = () => {
       .min(3, t('errors.length'))
       .max(20, t('errors.length'))
       .required(t('errors.required')),
-    password: Yup.string()
-      .trim()
-      .min(6, t('errors.passwordLength'))
-      .required(t('errors.required')),
+    password: Yup.string().trim().min(6, t('errors.passwordLength')).required(t('errors.required')),
     passwordConfirmation: Yup.string()
       .trim()
       .oneOf([Yup.ref('password'), t('errors.passwordConfirmation')])
@@ -65,7 +53,6 @@ const SignUpPage = () => {
           return;
         }
         toast.error(t('errors.netWorkError'));
-        rollbar.error('Signup', error.message);
       }
     },
     validationSchema,
@@ -77,23 +64,12 @@ const SignUpPage = () => {
         <Col xs={12} md={8} xxl={6}>
           <Card>
             <Card.Body className="row p-5">
-              <Col
-                xs={12}
-                md={6}
-                className="d-flex align-items-center justify-content-center"
-              >
+              <Col xs={12} md={6} className="d-flex align-items-center justify-content-center">
                 <Image src={signupImage} rounded alt={t('headers.signup')} />
               </Col>
-              <Form
-                onSubmit={formik.handleSubmit}
-                className="col-12 col-md-6 mt-3 mt-mb-0"
-              >
+              <Form onSubmit={formik.handleSubmit} className="col-12 col-md-6 mt-3 mt-mb-0">
                 <h1 className="text-center mb-4 h2">{t('headers.signup')}</h1>
-                <FloatingLabel
-                  controlId="username"
-                  label={t('placeholders.user')}
-                  className="mb-3"
-                >
+                <FloatingLabel controlId="username" label={t('placeholders.user')} className="mb-3">
                   <Form.Control
                     type="text"
                     name="username"
@@ -101,16 +77,13 @@ const SignUpPage = () => {
                     placeholder={t('placeholders.user')}
                     onChange={formik.handleChange}
                     value={formik.values.username}
-                    isInvalid={
-                      (formik.touched.username && formik.errors.username) ||
-                      authFailed
-                    }
+                    isInvalid={(formik.touched.username && formik.errors.username) || authFailed}
                     disabled={formik.isSubmitting}
                     autoFocus
                     ref={inputRef}
                   />
                   {authFailed ? (
-                    <Form.Control.Feedback type="invalid"></Form.Control.Feedback>
+                    <Form.Control.Feedback type="invalid" />
                   ) : (
                     <Form.Control.Feedback type="invalid" tooltip>
                       {authFailed ? null : formik.errors.username}
@@ -130,14 +103,11 @@ const SignUpPage = () => {
                     placeholder={t('placeholders.password')}
                     onChange={formik.handleChange}
                     value={formik.values.password}
-                    isInvalid={
-                      (formik.touched.password && formik.errors.password) ||
-                      authFailed
-                    }
+                    isInvalid={(formik.touched.password && formik.errors.password) || authFailed}
                     disabled={formik.isSubmitting}
                   />
                   {authFailed ? (
-                    <Form.Control.Feedback type="invalid"></Form.Control.Feedback>
+                    <Form.Control.Feedback type="invalid" />
                   ) : (
                     <Form.Control.Feedback type="invalid" tooltip>
                       {formik.errors.password}
@@ -158,23 +128,16 @@ const SignUpPage = () => {
                     onChange={formik.handleChange}
                     value={formik.values.passwordConfirmation}
                     isInvalid={
-                      (formik.touched.passwordConfirmation &&
-                        formik.errors.passwordConfirmation) ||
-                      authFailed
+                      (formik.touched.passwordConfirmation && formik.errors.passwordConfirmation)
+                      || authFailed
                     }
                     disabled={formik.isSubmitting}
                   />
                   <Form.Control.Feedback type="invalid" tooltip>
-                    {authFailed
-                      ? t('errors.userExists')
-                      : formik.errors.passwordConfirmation}
+                    {authFailed ? t('errors.userExists') : formik.errors.passwordConfirmation}
                   </Form.Control.Feedback>
                 </FloatingLabel>
-                <Button
-                  variant="outline-info"
-                  className="w-100 mb-3"
-                  type="submit"
-                >
+                <Button variant="outline-info" className="w-100 mb-3" type="submit">
                   {t('buttons.signup')}
                 </Button>
               </Form>

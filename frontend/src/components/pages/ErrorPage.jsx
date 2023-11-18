@@ -1,16 +1,13 @@
 import React from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
-import { useRouteError } from 'react-router-dom';
 import { Link } from 'react-router-dom';
-import { useRollbar } from '@rollbar/react';
 import { useTranslation } from 'react-i18next';
+
 import routes from '../../routes';
 
-export default function ErrorPage() {
+const ErrorPage = () => {
   const { t } = useTranslation();
-  const rollbar = useRollbar();
-  const error = useRouteError();
-  rollbar.error('Page not found', error);
+
   return (
     <Container fluid className="h-100">
       <Row className="justify-content-center align-items-center h-100">
@@ -22,4 +19,6 @@ export default function ErrorPage() {
       </Row>
     </Container>
   );
-}
+};
+
+export default ErrorPage;

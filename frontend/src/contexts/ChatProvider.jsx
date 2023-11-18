@@ -1,8 +1,8 @@
-import React from 'react';
+/* eslint-disable react-hooks/exhaustive-deps */
+import React, { useMemo } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 
-import { ChatContext } from '.';
-import { useAuth } from '.';
+import { ChatContext, useAuth } from '.';
 import { getCurrentChannelId } from '../slices/selectors';
 import { actions as channelsActions } from '../slices/channelsSlice';
 
@@ -23,24 +23,27 @@ const ChatProvider = ({ socket, children }) => {
   };
 
   const addChannel = async (channel) => {
-    const { data } = await socket
-      .timeout(TIMEOUT_REQUEST)
-      .emitWithAck('newChannel', channel);
+    const { data } = await socket.timeout(TIMEOUT_REQUEST).emitWithAck('newChannel', channel);
     dispatch(channelsActions.setCurrentChannel(data.id));
   };
 
   const removeChannel = async (id) => {
     await socket.timeout(TIMEOUT_REQUEST).emit('removeChannel', { id });
   };
+
   const renameChannel = async ({ id, name }) => {
     await socket.timeout(TIMEOUT_REQUEST).emit('renameChannel', { id, name });
   };
+
+  const value = useMemo(() => ({
+    addMessage, addChannel, removeChannel, renameChannel,
+  }), [addChannel, addMessage, removeChannel, renameChannel]);
+
   return (
-    <ChatContext.Provider
-      value={{ addMessage, addChannel, removeChannel, renameChannel }}
-    >
+    <ChatContext.Provider value={value}>
       {children}
     </ChatContext.Provider>
   );
 };
+
 export default ChatProvider;

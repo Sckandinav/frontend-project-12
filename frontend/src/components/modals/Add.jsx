@@ -2,7 +2,6 @@ import React, { useEffect, useRef } from 'react';
 import { useFormik } from 'formik';
 import { Button, Modal, Form } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
-import { useRollbar } from '@rollbar/react';
 import { toast } from 'react-toastify';
 import * as Yup from 'yup';
 import * as leoProfanity from 'leo-profanity';
@@ -13,7 +12,6 @@ const Add = ({ hideModal, channels }) => {
   const { addChannel } = useChatContext();
   const { t } = useTranslation();
   const inputRef = useRef(null);
-  const rollbar = useRollbar();
   const channelsNames = channels.map((channel) => channel.name);
 
   useEffect(() => {
@@ -43,7 +41,6 @@ const Add = ({ hideModal, channels }) => {
       } catch (error) {
         setSubmitting(false);
         toast.error(t('errors.netWorkError'));
-        rollbar.error('AddChannel', error.message);
       } finally {
         inputRef.current.focus();
       }
@@ -58,9 +55,7 @@ const Add = ({ hideModal, channels }) => {
       <Modal.Body>
         <Form onSubmit={formik.handleSubmit}>
           <Form.Group>
-            <Form.Label className="visually-hidden">
-              {t('headers.channelName')}
-            </Form.Label>
+            <Form.Label className="visually-hidden">{t('headers.channelName')}</Form.Label>
             <Form.Control
               id="name"
               name="name"
@@ -73,10 +68,9 @@ const Add = ({ hideModal, channels }) => {
               disabled={formik.isSubmitting}
               isInvalid={formik.touched.name && formik.errors.name}
             />
-            <Form.Control.Feedback type="invalid">
-              {formik.errors.name}
-            </Form.Control.Feedback>
+            <Form.Control.Feedback type="invalid">{formik.errors.name}</Form.Control.Feedback>
           </Form.Group>
+
           <Form.Group className="mb-3 gap-2 d-flex justify-content-end">
             <Button variant="secondary" onClick={hideModal}>
               {t('buttons.canсel')}

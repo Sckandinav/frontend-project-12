@@ -9,6 +9,7 @@ import routes from '../../routes';
 const Header = () => {
   const { user, logOut } = useAuth();
   const { t } = useTranslation();
+
   return (
     <Navbar expand="lg" className="shadow-sm bg-white">
       <Container>
@@ -24,4 +25,5 @@ const Header = () => {
     </Navbar>
   );
 };
+
 export default Header;

@@ -2,23 +2,24 @@ import React, { useEffect, useRef } from 'react';
 import { Button, Form, Modal } from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { useFormik } from 'formik';
-import { useRollbar } from '@rollbar/react';
 import { toast } from 'react-toastify';
 import * as Yup from 'yup';
 import * as leoProfanity from 'leo-profanity';
+
 import { useChatContext } from '../../contexts';
+
 const Rename = ({ modalInfo, hideModal, channels }) => {
   const { renameChannel } = useChatContext();
   const { channel } = modalInfo;
   const { t } = useTranslation();
   const inputRef = useRef(null);
-  const rollbar = useRollbar();
-  const channelsNames = channels.map((channel) => channel.name);
+  const channelsNames = channels.map((el) => el.name);
 
   useEffect(() => {
     inputRef.current.focus();
     inputRef.current.select();
   }, []);
+
   const validationSchema = Yup.object().shape({
     name: Yup.string()
       .trim()
@@ -28,6 +29,7 @@ const Rename = ({ modalInfo, hideModal, channels }) => {
       .transform((value) => leoProfanity.clean(value))
       .notOneOf(channelsNames, t('errors.notOneOf')),
   });
+
   const formik = useFormik({
     initialValues: { id: channel.id, name: channel.name },
     onSubmit: async ({ id, name }, { setSubmitting }) => {
@@ -39,11 +41,11 @@ const Rename = ({ modalInfo, hideModal, channels }) => {
       } catch (error) {
         setSubmitting(false);
         toast.error(t('errors.netWorkError'));
-        rollbar.error('RenameChannel', error.message);
       }
     },
     validationSchema,
   });
+
   return (
     <Modal show centered onHide={hideModal}>
       <Modal.Header closeButton>
@@ -52,9 +54,6 @@ const Rename = ({ modalInfo, hideModal, channels }) => {
       <Modal.Body>
         <Form onSubmit={formik.handleSubmit}>
           <Form.Group>
-            <Form.Label className="visually-hidden">
-              {t('headers.channelName')}
-            </Form.Label>
             <Form.Control
               id="name"
               name="name"
@@ -66,10 +65,12 @@ const Rename = ({ modalInfo, hideModal, channels }) => {
               disabled={formik.isSubmitting}
               isInvalid={formik.touched.name && formik.errors.name}
             />
-            <Form.Control.Feedback type="invalid">
-              {formik.errors.name}
-            </Form.Control.Feedback>
+            <Form.Label className="visually-hidden" htmlFor="name">
+              {t('headers.channelName')}
+            </Form.Label>
+            <Form.Control.Feedback type="invalid">{formik.errors.name}</Form.Control.Feedback>
           </Form.Group>
+
           <Form.Group className="mb-3 gap-2 d-flex justify-content-end">
             <Button variant="secondary" onClick={hideModal}>
               {t('buttons.canсel')}
@@ -83,4 +84,5 @@ const Rename = ({ modalInfo, hideModal, channels }) => {
     </Modal>
   );
 };
+
 export default Rename;
