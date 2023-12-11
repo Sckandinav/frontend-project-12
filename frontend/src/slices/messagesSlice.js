@@ -1,5 +1,7 @@
+/* eslint-disable functional/no-expression-statements */
+/* eslint-disable no-param-reassign */
 import { createSlice, createEntityAdapter } from '@reduxjs/toolkit';
-import { actions as channelActions } from './channelsSlice';
+import { actions as channelsActions } from './channelsSlice';
 
 const messagesAdapter = createEntityAdapter();
 
@@ -10,19 +12,22 @@ const messagesSlice = createSlice({
   initialState,
   reducers: {
     addMessage: messagesAdapter.addOne,
-    addMessages: messagesAdapter.addMany,
+    addManyMessages: messagesAdapter.addMany,
   },
   extraReducers: (builder) => {
-    builder.addCase(channelActions.removeChannel, (state, action) => {
-      const currentChannelId = action.payload;
-      const mapessagesIds = Object.values(state.entities)
-        .filter((e) => e.channelId === currentChannelId)
-        .map(({ id }) => id);
-      messagesAdapter.removeMany(state, mapessagesIds);
+    builder.addCase(channelsActions.deleteChannel, (state, { payload }) => {
+      const channelId = payload;
+      const resultEntities = Object.values(state.entities).filter(
+        (msg) => msg.channelId !== channelId,
+      );
+      messagesAdapter.setAll(state, resultEntities);
     });
   },
 });
 
 export const { actions } = messagesSlice;
-export const selectors = messagesAdapter.getSelectors((state) => state.messages);
+export const messagesSelectors = messagesAdapter.getSelectors(
+  (state) => state.messages,
+);
+
 export default messagesSlice.reducer;

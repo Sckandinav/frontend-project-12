@@ -1,65 +1,23 @@
 import React from 'react';
-import {
-  Route,
-  RouterProvider,
-  Navigate,
-  useLocation,
-  createBrowserRouter,
-  createRoutesFromElements,
-} from 'react-router-dom';
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
-
-import Layout from './pages/Layout';
-import ErrorPage from './pages/ErrorPage';
-import LoginPage from './pages/LoginPage';
-import ChatPage from './pages/ChatPage';
-import SignUpPage from './pages/SignUpPage';
-import { useAuth } from '../contexts';
-import routes from '../routes';
-
-const Root = ({ children }) => {
-  const { user } = useAuth();
-  const location = useLocation();
-  return user ? children : <Navigate to={routes.loginPage} state={{ from: location }} />;
-};
-
-const router = createBrowserRouter(
-  createRoutesFromElements(
-    <Route path={routes.rootPage} element={<Layout />}>
-      <Route
-        index
-        element={(
-          <Root>
-            <ChatPage />
-          </Root>
-        )}
-      />
-      <Route path={routes.loginPage} element={<LoginPage />} />
-      <Route path={routes.signupPage} element={<SignUpPage />} />
-      <Route path="*" element={<ErrorPage />} />
-    </Route>,
-  ),
-);
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import Login from './pages/Login.jsx';
+import NotFoundPage from './pages/NotFoundPage.jsx';
+import HomePage from './pages/HomePage.jsx';
+import Nav from './NavBar.jsx';
+import SignUpForm from './pages/SignUpForm.jsx';
+import routes from '../routes.js';
 
 const App = () => (
-  <>
-    <div className="d-flex flex-column h-100">
-      <RouterProvider router={router} />
-    </div>
-    <ToastContainer
-      position="top-right"
-      autoClose={2000}
-      hideProgressBar={false}
-      newestOnTop={false}
-      closeOnClick
-      rtl={false}
-      pauseOnFocusLoss
-      draggable
-      pauseOnHover
-      theme="light"
-    />
-  </>
+  <BrowserRouter>
+    <Routes>
+      <Route path={routes.home()} element={<Nav />}>
+        <Route index element={<HomePage />} />
+        <Route path={routes.login()} element={<Login />} />
+        <Route path={routes.signUp()} element={<SignUpForm />} />
+        <Route path="*" element={<NotFoundPage />} />
+      </Route>
+    </Routes>
+  </BrowserRouter>
 );
 
 export default App;

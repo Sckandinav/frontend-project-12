@@ -1,88 +1,110 @@
+/* eslint-disable functional/no-expression-statements */
 import React, { useEffect, useRef } from 'react';
-import { Button, Form, Modal } from 'react-bootstrap';
+import { useSelector, useDispatch } from 'react-redux';
 import { useTranslation } from 'react-i18next';
+import { Button, Modal, Form } from 'react-bootstrap';
+import * as Yup from 'yup';
+import filter from 'leo-profanity';
 import { useFormik } from 'formik';
 import { toast } from 'react-toastify';
-import * as Yup from 'yup';
-import * as leoProfanity from 'leo-profanity';
 
-import { useChatContext } from '../../contexts';
+import { useWSocket } from '../../contexts/ChatProvider.js';
+import { modalsActions } from '../../slices/index.js';
+import { selectors } from '../../slices/channelsSelectors.js';
 
-const Rename = ({ modalInfo, hideModal, channels }) => {
-  const { renameChannel } = useChatContext();
-  const { channel } = modalInfo;
+const RenameModalChannel = () => {
   const { t } = useTranslation();
+  const dispatch = useDispatch();
   const inputRef = useRef(null);
-  const channelsNames = channels.map((el) => el.name);
+  const { emitRenameChannel } = useWSocket();
+  const channels = useSelector(selectors.selectAll);
+  const { channelId, show } = useSelector((state) => state.modal);
+  const currentChannel = useSelector((state) =>
+    selectors.selectById(state, channelId),
+  );
+
+  const channelNames = channels.map((channelName) => channelName.name);
 
   useEffect(() => {
-    inputRef.current.focus();
     inputRef.current.select();
   }, []);
 
-  const validationSchema = Yup.object().shape({
+  const handleClose = () => dispatch(modalsActions.isClose());
+
+  const validSchema = Yup.object().shape({
     name: Yup.string()
       .trim()
-      .required(t('errors.required'))
-      .min(3, t('errors.length'))
-      .max(20, t('errors.length'))
-      .transform((value) => leoProfanity.clean(value))
-      .notOneOf(channelsNames, t('errors.notOneOf')),
+      .required(t('modal.validChannel.required'))
+      .min(3, t('modal.validChannel.nameMinMax'))
+      .max(20, t('modal.validChannel.nameMinMax'))
+      .notOneOf(channelNames, t('modal.validChannel.uniq')),
   });
 
   const formik = useFormik({
-    initialValues: { id: channel.id, name: channel.name },
-    onSubmit: async ({ id, name }, { setSubmitting }) => {
+    initialValues: {
+      name: currentChannel?.name,
+    },
+    validateOnChange: false,
+    validateOnBlur: false,
+    validationSchema: validSchema,
+    onSubmit: async (values) => {
+      formik.setSubmitting(true);
+      const newName = filter.clean(values.name);
       try {
-        await renameChannel({ id, name: leoProfanity.clean(name) });
-        setSubmitting(true);
-        hideModal();
-        toast.success(t('toastify.channelRenamed'));
+        await emitRenameChannel(channelId, newName);
+        formik.resetForm();
+        toast.success(t('toasts.renameChanel'));
+        handleClose();
       } catch (error) {
-        setSubmitting(false);
-        toast.error(t('errors.netWorkError'));
+        formik.setSubmitting(false);
+        toast.error(t('toasts.connectError'));
       }
     },
-    validationSchema,
   });
 
   return (
-    <Modal show centered onHide={hideModal}>
+    <Modal show={show} onHide={handleClose} centered>
       <Modal.Header closeButton>
-        <Modal.Title>{t('headers.renameChannel')}</Modal.Title>
+        <Modal.Title>{t('modal.renameModalChannel')}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form onSubmit={formik.handleSubmit}>
-          <Form.Group>
-            <Form.Control
-              id="name"
-              name="name"
-              type="text"
-              onChange={formik.handleChange}
-              value={formik.values.name}
-              className="mb-2"
-              ref={inputRef}
-              disabled={formik.isSubmitting}
-              isInvalid={formik.touched.name && formik.errors.name}
-            />
-            <Form.Label className="visually-hidden" htmlFor="name">
-              {t('headers.channelName')}
-            </Form.Label>
-            <Form.Control.Feedback type="invalid">{formik.errors.name}</Form.Control.Feedback>
-          </Form.Group>
-
-          <Form.Group className="mb-3 gap-2 d-flex justify-content-end">
-            <Button variant="secondary" onClick={hideModal}>
-              {t('buttons.canсel')}
-            </Button>
-            <Button variant="info" type="submit" disabled={formik.isSubmitting}>
-              {t('buttons.send')}
-            </Button>
-          </Form.Group>
+          <fieldset disabled={formik.isSubmitting}>
+            <Form.Group>
+              <Form.Control
+                name="name"
+                id="name"
+                className="mb-2"
+                onChange={formik.handleChange}
+                onBlur={formik.handleBlur}
+                value={formik.values.name}
+                ref={inputRef}
+                isInvalid={formik.errors.name}
+              />
+              <Form.Label htmlFor="name" visuallyHidden>
+                {t('modal.nameChannel')}
+              </Form.Label>
+              <Form.Control.Feedback type="invalid">
+                {t(formik.errors.name)}
+              </Form.Control.Feedback>
+            </Form.Group>
+            <div className="d-flex justify-content-end">
+              <Button
+                className="me-2"
+                variant="secondary"
+                type="button"
+                onClick={handleClose}
+              >
+                {t('modal.buttonCancel')}
+              </Button>
+              <Button variant="primary" type="submit">
+                {t('modal.buttonCreate')}
+              </Button>
+            </div>
+          </fieldset>
         </Form>
       </Modal.Body>
     </Modal>
   );
 };
-
-export default Rename;
+export default RenameModalChannel;

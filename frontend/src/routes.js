@@ -1,12 +1,10 @@
 const apiPath = '/api/v1';
 
-const routes = {
-  dataApi: [apiPath, 'data'].join('/'),
-  loginApi: [apiPath, 'login'].join('/'),
-  signupApi: [apiPath, 'signup'].join('/'),
-  rootPage: '/',
-  loginPage: '/login',
-  signupPage: '/signup',
+export default {
+  loginPath: () => [apiPath, 'login'].join('/'),
+  dataPath: () => [apiPath, 'data'].join('/'),
+  signUpPath: () => [apiPath, 'signup'].join('/'),
+  home: () => '/',
+  login: () => '/login',
+  signUp: () => '/signup',
 };
-
-export default routes;

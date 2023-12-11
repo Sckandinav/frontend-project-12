@@ -1,32 +1,33 @@
+/* eslint-disable functional/no-expression-statements */
+/* eslint-disable functional/no-conditional-statements */
 /* eslint-disable no-param-reassign */
-
 import { createSlice, createEntityAdapter } from '@reduxjs/toolkit';
 
 export const channelsAdapter = createEntityAdapter();
 
-const DEFAULT_CHANNEL = 1;
-
-const initialState = channelsAdapter.getInitialState({ currentChannelId: DEFAULT_CHANNEL });
+const initialState = channelsAdapter.getInitialState({
+  currentChannelId: 1,
+});
 
 const channelsSlice = createSlice({
   name: 'channels',
   initialState,
   reducers: {
-    addChannels: channelsAdapter.addMany,
     addChannel: channelsAdapter.addOne,
-    renameChannel: channelsAdapter.setOne,
-    setCurrentChannel: (state, { payload }) => {
-      state.currentChannelId = payload;
-    },
-    removeChannel: (state, { payload }) => {
-      channelsAdapter.removeOne(state, payload);
+    addManyChannels: channelsAdapter.addMany,
+    updateChannel: channelsAdapter.updateOne,
+    deleteChannel: (state, { payload }) => {
       if (state.currentChannelId === payload) {
-        state.currentChannelId = DEFAULT_CHANNEL;
+        const newCurrentChannelId = state.ids[0];
+        state.currentChannelId = newCurrentChannelId;
       }
+      channelsAdapter.removeOne(state, payload);
+    },
+    setCurrentChannelId: (state, { payload }) => {
+      state.currentChannelId = payload;
     },
   },
 });
 
 export const { actions } = channelsSlice;
-export const selectors = channelsAdapter.getSelectors((state) => state.channels);
 export default channelsSlice.reducer;

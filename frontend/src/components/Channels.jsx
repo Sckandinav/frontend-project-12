@@ -1,73 +1,129 @@
-import React, { useState, useRef, useEffect } from 'react';
-import { Button, Col } from 'react-bootstrap';
-import { useSelector } from 'react-redux';
+/* eslint-disable functional/no-conditional-statements */
+/* eslint-disable functional/no-expression-statements */
+import React, { useEffect, useRef } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { FaPlus } from 'react-icons/fa';
 import { useTranslation } from 'react-i18next';
+import { Button } from 'react-bootstrap';
+import {
+  selectors,
+  selectCurrentChannelId,
+} from '../slices/channelsSelectors.js';
+import { channelsActions, modalsActions } from '../slices/index.js';
+import NewChannel from './NewChannel.jsx';
+import store from '../slices/store.js';
 
-import Channel from './Channel';
-import { getAllChannels } from '../slices/selectors';
-import renderModal from './modals/Modal';
+const DefaultChannel = ({ channel, handleCurrentChannel }) => {
+  const currentChannelId = useSelector(selectCurrentChannelId);
+  const isCurrentChannel = currentChannelId === channel.id;
 
+  return (
+    <Button
+      type="button"
+      className="w-100 rounded-0 text-start btn"
+      onClick={() => handleCurrentChannel(channel.id)}
+      variant={isCurrentChannel ? 'primary' : null}
+    >
+      <span className="me-1">#</span>
+      {channel.name}
+    </Button>
+  );
+};
 const Channels = () => {
-  const channels = useSelector(getAllChannels);
   const { t } = useTranslation();
-  const channelsEndRef = useRef(null);
+  const dispatch = useDispatch();
+  const channelListRef = useRef(null);
+  const activeChannelId = useSelector(selectCurrentChannelId);
+  const channels = useSelector(selectors.selectAll);
 
   useEffect(() => {
-    channelsEndRef.current?.scrollIntoView();
+    const container = channelListRef.current;
+    if (container) {
+      container.scrollTop = container.scrollHeight;
+    }
   }, [channels]);
 
-  const initialModal = {
-    type: null,
-    channel: null,
-  };
-  const [modalInfo, setModalInfo] = useState(initialModal);
+  useEffect(() => {
+    const container = channelListRef.current;
+    if (container) {
+      const defaultChannel = channels.find((channel) => channel.id === 1);
+      if (!defaultChannel || activeChannelId === 1) {
+        container.scrollTop = 0;
+      }
+    }
+  }, [channels, activeChannelId]);
 
-  const showModal = (type, channel = null) => {
-    setModalInfo({
-      type,
-      channel,
-    });
+  const handleAddChannel = () => {
+    dispatch(
+      modalsActions.isOpen({ type: 'adding', show: true, channelId: '' }),
+    );
   };
 
-  const hideModal = () => {
-    setModalInfo({
-      type: null,
-      channel: null,
-    });
+  const handleCurrentChannel = (id) => {
+    store.dispatch(channelsActions.setCurrentChannelId(id));
+  };
+
+  const handleRemoveChannel = (channel) => {
+    dispatch(
+      modalsActions.isOpen({
+        type: 'removing',
+        show: true,
+        channelId: channel,
+      }),
+    );
+  };
+
+  const handleRenameChannel = (channel) => {
+    dispatch(
+      modalsActions.isOpen({
+        type: 'renaming',
+        show: true,
+        channelId: channel,
+      }),
+    );
   };
 
   return (
-    <Col xs={4} md={2} className="border-end px-0 bg-light flex-column h-100 d-flex">
+    <div className="col-4 col-md-2 border-end px-0 bg-light flex-column h-100 d-flex">
       <div className="d-flex mt-1 justify-content-between mb-2 ps-4 pe-2 p-4">
-        <b>{t('headers.channels')}</b>
+        <b>{t('modal.channels')}</b>
         <Button
-          onClick={() => showModal('adding')}
-          variant="outline-info"
-          className="p-0 text-info-60 btn-group-vertical"
+          onClick={handleAddChannel}
+          type="button"
+          className="p-0 text-primary btn btn-group-vertical"
         >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 16 16"
-            width="20"
-            height="20"
-            fill="currentColor"
-          >
-            <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z" />
-          </svg>
           <span className="visually-hidden">+</span>
+          <FaPlus
+            style={{ color: 'white', stroke: 'white', strokeWidth: '1px' }}
+          />
         </Button>
       </div>
       <ul
+        ref={channelListRef}
         id="channels-box"
         className="nav flex-column nav-pills nav-fill px-2 mb-3 overflow-auto h-100 d-block"
       >
         {channels.map((channel) => (
-          <Channel key={channel.id} channel={channel} showModal={showModal} />
+          <li key={channel.id} className="nav-item w-100">
+            {!channel.removable ? (
+              <DefaultChannel
+                key={channel.id}
+                channel={channel}
+                handleCurrentChannel={handleCurrentChannel}
+              />
+            ) : (
+              <NewChannel
+                key={channel.id}
+                channel={channel}
+                handleCurrentChannel={handleCurrentChannel}
+                handleRemoveChannel={handleRemoveChannel}
+                handleRenameChannel={handleRenameChannel}
+              />
+            )}
+          </li>
         ))}
-        <span ref={channelsEndRef} />
       </ul>
-      {renderModal(modalInfo, hideModal, channels)}
-    </Col>
+    </div>
   );
 };
 
