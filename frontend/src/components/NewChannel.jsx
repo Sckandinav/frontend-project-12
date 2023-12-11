@@ -4,32 +4,19 @@ import { useSelector } from 'react-redux';
 import { useTranslation } from 'react-i18next';
 import { selectCurrentChannelId } from '../slices/channelsSelectors.js';
 
-const ChannelItem = ({
+const NewChannel = ({
   channel,
-  onSelectChannel,
-  onRemoveChannel,
-  onRenameChannel,
+  handleCurrentChannel,
+  handleRemoveChannel,
+  handleRenameChannel,
 }) => {
   const { t } = useTranslation();
   const currentChannelId = useSelector(selectCurrentChannelId);
   const isCurrentChannel = currentChannelId === channel.id;
-
-  const handleSelectChannel = () => {
-    onSelectChannel(channel.id);
-  };
-
-  const handleRemoveChannel = () => {
-    onRemoveChannel(channel.id);
-  };
-
-  const handleRenameChannel = () => {
-    onRenameChannel(channel.id);
-  };
-
   return (
     <Dropdown as={ButtonGroup} className="d-flex">
       <Button
-        onClick={handleSelectChannel}
+        onClick={() => handleCurrentChannel(channel.id)}
         type="button"
         className="w-100 rounded-0 text-start btn text-truncate"
         variant={isCurrentChannel ? 'primary' : null}
@@ -46,15 +33,14 @@ const ChannelItem = ({
         <span className="visually-hidden">{t('modal.channelControl')}</span>
       </Dropdown.Toggle>
       <Dropdown.Menu>
-        <Dropdown.Item onClick={handleRemoveChannel}>
+        <Dropdown.Item onClick={() => handleRemoveChannel(channel.id)}>
           {t('modal.removeChannel')}
         </Dropdown.Item>
-        <Dropdown.Item onClick={handleRenameChannel}>
+        <Dropdown.Item onClick={() => handleRenameChannel(channel.id)}>
           {t('modal.renameChannel')}
         </Dropdown.Item>
       </Dropdown.Menu>
     </Dropdown>
   );
 };
-
-export default ChannelItem;
+export default NewChannel;
