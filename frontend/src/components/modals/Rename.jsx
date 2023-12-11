@@ -19,9 +19,7 @@ const RenameModalChannel = () => {
   const { emitRenameChannel } = useWSocket();
   const channels = useSelector(selectors.selectAll);
   const { channelId, show } = useSelector((state) => state.modal);
-  const currentChannel = useSelector((state) =>
-    selectors.selectById(state, channelId),
-  );
+  const currentChannel = useSelector((state) => selectors.selectById(state, channelId));
 
   const channelNames = channels.map((channelName) => channelName.name);
 

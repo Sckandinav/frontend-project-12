@@ -1,6 +1,12 @@
+/* eslint-disable no-confusing-arrow */
 /* eslint-disable functional/no-conditional-statements */
 /* eslint-disable functional/no-expression-statements */
-import React, { useContext, useRef, useEffect, useState } from 'react';
+import React, {
+  useContext,
+  useRef,
+  useEffect,
+  useState,
+} from 'react';
 import { useSelector } from 'react-redux';
 import { Form, Button, InputGroup } from 'react-bootstrap';
 import filter from 'leo-profanity';
@@ -94,26 +100,27 @@ const Messages = () => {
         className="chat-messages overflow-auto px-5"
         ref={msgRefInput}
       >
-        {filteredMessages.map((message) =>
-          message.username === user.username ? (
-            <div
-              key={message.id}
-              className="text-break mb-2"
-              style={{ backgroundColor: '#F4F4F4' }}
-            >
-              <b>{message.username}</b>: {message.body}
-            </div>
-          ) : (
-            <div key={message.id} className="text-break mb-2" ref={msgRefInput}>
-              <div className="d-inline-flex bg-body p-2 rounded border">
-                <div>
-                  <b>{message.username}</b>
-                </div>
-                : {message.body}
+        {filteredMessages.map((message) => message.username === user.username ? (
+          <div
+            key={message.id}
+            className="text-break mb-2"
+            style={{ backgroundColor: '#F4F4F4' }}
+          >
+            <b>{message.username}</b>
+            :
+            {message.body}
+          </div>
+        ) : (
+          <div key={message.id} className="text-break mb-2" ref={msgRefInput}>
+            <div className="d-inline-flex bg-body p-2 rounded border">
+              <div>
+                <b>{message.username}</b>
               </div>
+              :
+              {message.body}
             </div>
-          ),
-        )}
+          </div>
+        ))}
       </div>
       <div className="mt-auto px-5 py-3">
         <Form

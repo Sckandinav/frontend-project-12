@@ -1,12 +1,19 @@
-/* eslint-disable max-len */
-/* eslint-disable functional/no-conditional-statements */
-/* eslint-disable functional/no-expression-statements */
-import React, { useState, useContext, useRef, useEffect } from 'react';
+import React, {
+  useState,
+  useContext,
+  useRef,
+  useEffect,
+} from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
-import { Form, Image, Button, Card } from 'react-bootstrap';
+import {
+  Form,
+  Image,
+  Button,
+  Card,
+} from 'react-bootstrap';
 import { useTranslation } from 'react-i18next';
 import { toast } from 'react-toastify';
 
@@ -101,8 +108,8 @@ const SignUpForm = () => {
                       onBlur={formik.handleBlur}
                       ref={inputRef}
                       isInvalid={
-                        (formik.touched.username && formik.errors.username) ||
-                        authError
+                        (formik.touched.username && formik.errors.username)
+                        || authError
                       }
                     />
                     <Form.Label htmlFor="username">
@@ -129,8 +136,8 @@ const SignUpForm = () => {
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
                       isInvalid={
-                        (formik.touched.password && formik.errors.password) ||
-                        authError
+                        (formik.touched.password && formik.errors.password)
+                        || authError
                       }
                     />
                     <Form.Label htmlFor="password">
@@ -152,9 +159,9 @@ const SignUpForm = () => {
                       onChange={formik.handleChange}
                       onBlur={formik.handleBlur}
                       isInvalid={
-                        (formik.touched.confirmPassword &&
-                          formik.errors.confirmPassword) ||
-                        authError
+                        (formik.touched.confirmPassword
+                        && formik.errors.confirmPassword)
+                        || authError
                       }
                     />
                     <Form.Label htmlFor="confirmPassword">

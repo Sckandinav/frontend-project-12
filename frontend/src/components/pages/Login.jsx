@@ -1,7 +1,17 @@
 /* eslint-disable functional/no-conditional-statements */
 /* eslint-disable functional/no-expression-statements */
-import React, { useContext, useRef, useState, useEffect } from 'react';
-import { Button, Card, Image, Form } from 'react-bootstrap';
+import React, {
+  useContext,
+  useRef,
+  useState,
+  useEffect,
+} from 'react';
+import {
+  Button,
+  Card,
+  Image,
+  Form,
+} from 'react-bootstrap';
 import { Link, useNavigate } from 'react-router-dom';
 import { useFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
@@ -113,8 +123,8 @@ const Login = () => {
                     {t('authForm.password')}
                   </Form.Label>
                   <Form.Control.Feedback type="invalid" tooltip>
-                    {t(formik.errors.password) ||
-                      t('authForm.validForm.notExist')}
+                    {t(formik.errors.password)
+                    || t('authForm.validForm.notExist')}
                   </Form.Control.Feedback>
                 </Form.Floating>
                 <Button
